@@ -4,6 +4,6 @@ startURL = 'https://www.seek.co.nz/api/chalice-search/v4/search?siteKey=NZ-Main&
 jobURL = 'https://www.seek.co.nz/job/'
 workers = 10
 # Parametros de busqueda
-keywords = 'vue'
+keywords = 'project manager'
 page = 1
 where = "All+New+Zealand"

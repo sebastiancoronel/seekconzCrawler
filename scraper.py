@@ -25,18 +25,18 @@ class Scraper:
                        "telefono_1": None,
                        "telefono_2": None,
                        "telefono_3": None,
-                       "telefono_4": None,
-                       "telefono_5": None,
+                       # "telefono_4": None,
+                       # "telefono_5": None,
                        "resumen": None,
-                       "contenido": None,
+                       #"contenido": None,
                        "tipo": None,  # part time o full time
                        "salario": None,
                        "ubicacion": None,
                        "email_1": None,
                        "email_2": None,
                        "email_3": None,
-                       "email_4": None,
-                       "email_5": None,
+                       # "email_4": None,
+                       # "email_5": None,
                        "link": None,
                        }
 
@@ -52,8 +52,8 @@ class Scraper:
                 try:
                     result_dict["telefono_2"] = re.findall('\d(?:\s?\d){5,}', content)[0]
                     result_dict["telefono_3"] = re.findall('\d(?:\s?\d){5,}', content)[1]
-                    result_dict["telefono_4"] = re.findall('\d(?:\s?\d){5,}', content)[2]
-                    result_dict["telefono_5"] = re.findall('\d(?:\s?\d){5,}', content)[3]
+                    # result_dict["telefono_4"] = re.findall('\d(?:\s?\d){5,}', content)[2]
+                    # result_dict["telefono_5"] = re.findall('\d(?:\s?\d){5,}', content)[3]
                 except Exception as e:
                     pass
 
@@ -65,21 +65,27 @@ class Scraper:
                         re.findall(r'\b([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,})\b', content)[0]
                     result_dict["email_2"] = \
                         re.findall(r'\b([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,})\b', content)[1]
-                    result_dict["email_3"] = \
-                        re.findall(r'\b([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,})\b', content)[2]
-                    result_dict["email_4"] = \
-                        re.findall(r'\b([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,})\b', content)[3]
                 except Exception as e:
                     pass
 
             try:
-                result_dict["salario"] = jobJson["salary"]["label"]
+                # Extraer y procesar el salario
+                salary_label = jobJson["salary"]["label"]
+                # Buscar el primer número de la forma $<number>, <number>
+                match = re.search(r'\$([0-9,]+)', salary_label)
+                if match:
+                    # Eliminar las comas y convertir a entero
+                    number_str = match.group(1).replace(',', '')
+                    result_dict["salario"] = int(number_str)
+                else:
+                    result_dict["salario"] = None
             except Exception as e:
                 pass
+
             result_dict["resumen"] = jobJson["abstract"]
             result_dict["tipo"] = jobJson["workTypes"]["label"]
             result_dict["ubicacion"] = jobJson["location"]["label"]
-            result_dict["contenido"] = content
+            #result_dict["contenido"] = content
             result_dict["link"] = jobJson["shareLink"]
 
         except Exception as e:
